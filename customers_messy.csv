@@ -1,0 +1,8 @@
+customer_id,name,amount,city
+00123, Anna ,100,Warsaw
+00456,BOB,0,Krakow
+00789,Alice,,Gdansk
+00123, Anna ,100,Warsaw
+00456,Robert,50,Krakow
+00042,Eva,75,
+00999,Cara,unknown,Warsaw
