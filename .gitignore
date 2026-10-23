@@ -12,3 +12,14 @@ wheels/
 # Generated practice outputs
 /customers_cleaned.csv
 /practice_output.csv
+
+# Generated outputs
+/outputs/
+
+# Python temporary files
+__pycache__/
+.pytest_cache/
+*.pyc
+
+# Virtual environment
+.venv/

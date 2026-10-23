@@ -1,0 +1,10 @@
+
+customer_id,name,email,amount,order_date
+00101,  alice SMITH  ,ALICE@EXAMPLE.COM,125.50,2026-10-01
+00102,bob jones,bob@example.com,80,2026-10-02
+00102,Bob Jones,bob@example.com,90,2026-10-03
+00104,CHARLIE BROWN,charlie@example.com,unknown,2026-10-04
+00105,diana GREEN,diana@example.com,-35,2026-10-05
+00106,eve white,,200,2026-10-06
+00107,frank miller,frank@example.com,150,not-a-date
+00108,GRACE LEE,grace@example.com,320.75,2026-10-08
