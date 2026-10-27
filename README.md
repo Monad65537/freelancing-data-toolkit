@@ -22,18 +22,29 @@ It separates acceptable records from records requiring manual review and generat
 
 ## Installation
 
-Requirements:
+Requirements: Python 3.12 or a compatible version.
 
-- Python 3.12 or compatible version
-- pandas
-- openpyxl
-- pytest (for testing)
+Clone the repository and navigate to its directory:
 
-Install dependencies:
+git clone https://github.com/Monad65537/freelancing-data-toolkit.git
+cd freelancing-data-toolkit
 
-```bash
-python -m pip install pandas openpyxl pytest
-```
+Create a virtual environment:
+
+py -3.12 -m venv .venv
+
+Install the required dependencies:
+
+.\.venv\Scripts\python.exe -m pip install pandas openpyxl pytest
+
+Verify the installation:
+
+.\.venv\Scripts\python.exe -m pip check
+.\.venv\Scripts\python.exe dataclean_cli.py --help
+
+The help command should display the application's available arguments, including --input and --output.
+
+Note: DataClean Pro currently runs directly from its source repository; this procedure installs the dependencies rather than a separately packaged application.
 
 ## Usage
 
@@ -51,6 +62,37 @@ The program produces:
 | `flagged_rows.csv` | Records requiring manual review |
 | `quality_report.json` | Summary of data-quality problems |
 | `execution.log` | Processing log |
+
+### Inspecting the results
+
+After running the application, open the specified output directory.
+
+- **`cleaned_customers.csv`** contains accepted records that passed the implemented validation rules.
+- **`flagged_rows.csv`** contains records requiring manual review, together with their rejection reasons.
+- **`quality_report.json`** summarizes the processing results and data-quality findings.
+- **`execution.log`** records execution messages, including the number of loaded, accepted, and flagged records.
+
+To inspect the quality report in PowerShell:
+
+```powershell
+Get-Content outputs\quality_report.json
+```
+
+To inspect the first five accepted records:
+
+```powershell
+.\.venv\Scripts\python.exe -c "import pandas as pd; print(pd.read_csv('outputs/cleaned_customers.csv', dtype={'customer_id':'string'}).head())"
+```
+
+To inspect the first five flagged records:
+
+```powershell
+.\.venv\Scripts\python.exe -c "import pandas as pd; print(pd.read_csv('outputs/flagged_rows.csv', dtype={'customer_id':'string'}).head())"
+```
+
+Customer identifiers are explicitly loaded as strings to preserve leading zeros.
+
+**Important:** Flagged records should be reviewed against the client's agreed validation rules before making any corrections or discarding records. The program's acceptance decisions reflect its configured and implemented rules, not independent confirmation that the underlying business data is correct.
 
 ## Example results
 
