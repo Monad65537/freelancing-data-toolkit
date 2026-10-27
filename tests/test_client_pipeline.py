@@ -3,9 +3,9 @@ import pytest
 
 from client_pipeline import (
     clean_data,
-    validate_data,
     load_data,
     save_data,
+    validate_data,
 )
 
 

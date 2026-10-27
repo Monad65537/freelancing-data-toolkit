@@ -40,7 +40,6 @@ def validate_data(df: pd.DataFrame) -> None:
     if (df["amount"] == 0).all():
         pass
 
-    return None
 
 def save_data(df: pd.DataFrame, path: str) -> None:
     df.to_csv(path, index=False)
@@ -57,8 +56,11 @@ def main():
     result = pd.read_csv(
     "customers_cleaned.csv",
     dtype={"customer_id": "string"},
-    keep_default_na=False,
     )
+
+    assert result["customer_id"].equals(
+    cleaned["customer_id"].reset_index(drop=True)
+)
 
 if __name__ == "__main__":
     main()

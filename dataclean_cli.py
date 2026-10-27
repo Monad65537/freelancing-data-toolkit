@@ -3,13 +3,15 @@ import argparse
 import logging
 from pathlib import Path
 
-from dataclean_pro.cleaner import load_data, clean_data
-from dataclean_pro.validator import validate_data
+from dataclean_pro.cleaner import clean_data, load_data
 from dataclean_pro.report import (
     generate_report,
     save_report,
     save_results,
 )
+from dataclean_pro.validator import validate_data
+
+logger = logging.getLogger(__name__)
 
 
 def main():
@@ -41,17 +43,17 @@ def main():
         force=True,
     )
 
-    logging.info("Loading input dataset")
+    logger.info("Loading input dataset")
 
     df = load_data(args.input)
-    logging.info("Input rows: %d", len(df))
+    logger.info("Input rows: %d", len(df))
 
     cleaned = clean_data(df)
-    logging.info("Cleaning completed")
+    logger.info("Cleaning completed")
 
     accepted, flagged = validate_data(cleaned)
-    logging.info("Accepted rows: %d", len(accepted))
-    logging.warning("Flagged rows: %d", len(flagged))
+    logger.info("Accepted rows: %d", len(accepted))
+    logger.warning("Flagged rows: %d", len(flagged))
 
     report = generate_report(accepted, flagged)
 
@@ -61,7 +63,7 @@ def main():
         output_dir / "quality_report.json",
     )
 
-    logging.info("Results exported successfully")
+    logger.info("Results exported successfully")
 
     print("Processing completed.")
     print(f"Input rows: {report['input_rows']}")
