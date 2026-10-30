@@ -30,8 +30,12 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
 def validate_data(df: pd.DataFrame) -> None:
     #Customers IDs are not blank
-    if df["customer_id"].isnull().any():
-        raise ValueError("Customer IDs cannot be null.")
+    ids = df["customer_id"].astype("string")
+
+    invalid_ids = ids.isna() | ids.str.strip().eq("")
+
+    if invalid_ids.any():
+        raise ValueError("Customer IDs cannot be blank.")
     #Amounts are either valid numeric values or blank (which will be treated as missing)
     #Text such as "unknown" is rejected rather than silently converted to zero
     if df["amount"].isin(["unknown"]).any():
@@ -56,6 +60,7 @@ def main():
     result = pd.read_csv(
     "customers_cleaned.csv",
     dtype={"customer_id": "string"},
+    keep_default_na=False,
     )
 
     assert result["customer_id"].equals(

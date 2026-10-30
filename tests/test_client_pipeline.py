@@ -64,3 +64,52 @@ def test_export_preserves_customer_ids(tmp_path):
     assert output_path.exists()
     assert loaded["customer_id"].tolist() == ["00123", "00456"]
     assert len(loaded) == 2
+
+
+@pytest.mark.parametrize(
+    "invalid_id",
+    ["", "   ", None, pd.NA],
+)
+def test_validate_data_rejects_blank_customer_ids(invalid_id):
+    df = pd.DataFrame(
+        {
+            "customer_id": [invalid_id],
+            "name": ["Alice"],
+            "email": ["alice@example.com"],
+            "amount": ["100.00"],
+            "order_date": ["2026-10-15"],
+        }
+    )
+
+    with pytest.raises(ValueError, match="Customer IDs cannot be blank"):
+        validate_data(df)
+
+
+def test_validate_data_preserves_leading_zero_ids():
+    df = pd.DataFrame(
+        {
+            "customer_id": ["000123"],
+            "name": ["Alice"],
+            "email": ["alice@example.com"],
+            "amount": ["100.00"],
+            "order_date": ["2026-10-15"],
+        }
+    )
+
+    validate_data(df)
+
+    assert df.loc[0, "customer_id"] == "000123"
+
+
+def test_load_data_preserves_literal_na_and_leading_zeros(tmp_path):
+    input_file = tmp_path / "customers.csv"
+    input_file.write_text(
+        "customer_id,name,amount\n"
+        "000123,Alice,100.00\n"
+        "NA,Bob,50.00\n",
+        encoding="utf-8",
+    )
+
+    df = load_data(str(input_file))
+
+    assert df["customer_id"].tolist() == ["000123", "NA"]
